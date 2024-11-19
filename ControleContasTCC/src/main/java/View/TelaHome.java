@@ -6,6 +6,7 @@ package View;
 
 import Controller.ClientesController;
 import Model.Clientes;
+import View.Renderers.StatusCellRenderer;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,17 +29,18 @@ public class TelaHome extends javax.swing.JFrame {
     }
 
     private void carregarClientes() {
-        try {
-            List<Clientes> listaClientes = controller.listarClientes();
-            DefaultTableModel model = (DefaultTableModel) tableTelaInicial.getModel();
-            model.setRowCount(0); // Limpa a tabela
-            for (Clientes cliente : listaClientes) {
-                model.addRow(new Object[]{
-                    cliente.getId(), cliente.getNome(), obterNomeStatus(cliente.getIdStatus())
-                });
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar clientes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        configurarTabela();
+
+        List<Clientes> clientes = controller.listarClientes();
+        DefaultTableModel model = (DefaultTableModel) tableTelaInicial.getModel();
+        model.setRowCount(0);
+
+        for (Clientes cliente : clientes) {
+            model.addRow(new Object[]{
+                cliente.getId(),
+                cliente.getNome(),
+                obterNomeStatus(cliente.getIdStatus())
+            });
         }
     }
 
@@ -100,6 +102,7 @@ public class TelaHome extends javax.swing.JFrame {
         btGerenciarClientes = new javax.swing.JButton();
         btStatusCliente = new javax.swing.JButton();
         btPesquisaCliente = new javax.swing.JButton();
+        btPesquisaCliente1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -134,8 +137,25 @@ public class TelaHome extends javax.swing.JFrame {
         });
 
         btStatusCliente.setText("Status");
+        btStatusCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btStatusClienteActionPerformed(evt);
+            }
+        });
 
         btPesquisaCliente.setText("Pesquisar Cliente");
+        btPesquisaCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPesquisaClienteActionPerformed(evt);
+            }
+        });
+
+        btPesquisaCliente1.setText("Gerenciar Parcelas");
+        btPesquisaCliente1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPesquisaCliente1ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -151,27 +171,30 @@ public class TelaHome extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btGerenciarClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                    .addComponent(btGerenciarClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btStatusCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btPesquisaCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(btPesquisaCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btPesquisaCliente1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(btGerenciarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btStatusCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btPesquisaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btGerenciarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btPesquisaCliente1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btStatusCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btPesquisaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -180,9 +203,108 @@ public class TelaHome extends javax.swing.JFrame {
 
     private void btGerenciarClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGerenciarClientesActionPerformed
         TelaGerenciarClientes telaGerenciarClientes = new TelaGerenciarClientes();
-        telaGerenciarClientes.setVisible(true); 
+        telaGerenciarClientes.setVisible(true);
         telaGerenciarClientes.setLocationRelativeTo(this);
     }//GEN-LAST:event_btGerenciarClientesActionPerformed
+
+    private void btPesquisaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisaClienteActionPerformed
+        try {
+            // Mostra uma caixa de diálogo para o usuário digitar o nome
+            String nome = JOptionPane.showInputDialog(this, "Digite o nome do cliente:",
+                    "Pesquisar Cliente", JOptionPane.QUESTION_MESSAGE);
+
+            // Verifica se o usuário não cancelou ou deixou vazio
+            if (nome != null && !nome.trim().isEmpty()) {
+                // Chama o Controller para buscar os clientes pelo nome
+                List<Clientes> listaClientes = controller.pesquisarClientePorNome(nome);
+
+                // Verifica se encontrou algum cliente
+                if (listaClientes.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Nenhum cliente encontrado!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    DefaultTableModel model = (DefaultTableModel) tableTelaInicial.getModel();
+                    model.setRowCount(0);
+                    for (Clientes cliente : listaClientes) {
+                        model.addRow(new Object[]{
+                            cliente.getId(),
+                            cliente.getNome(),
+                            obterNomeStatus(cliente.getIdStatus())
+                        });
+                    }
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao pesquisar cliente: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btPesquisaClienteActionPerformed
+
+    private void btStatusClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStatusClienteActionPerformed
+        try {
+            int selectedRow = tableTelaInicial.getSelectedRow();
+
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente na tabela.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int clienteId = (int) tableTelaInicial.getValueAt(selectedRow, 0);
+
+            Clientes cliente = controller.buscarClientePorId(clienteId);
+
+            if (cliente == null) {
+                JOptionPane.showMessageDialog(this, "Cliente não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            TelaObservacao telaObservacao = new TelaObservacao(
+                    cliente.getId(),
+                    cliente.getObservacao(),
+                    obterNomeStatus(cliente.getIdStatus())
+            );
+            telaObservacao.setVisible(true);
+            telaObservacao.setLocationRelativeTo(this);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao abrir observação: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btStatusClienteActionPerformed
+
+    private void btPesquisaCliente1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisaCliente1ActionPerformed
+        try {
+            int selectedRow = tableTelaInicial.getSelectedRow();
+
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Por favor, selecione um cliente na tabela.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Recupera o ID do cliente selecionado
+            int clienteId = (int) tableTelaInicial.getValueAt(selectedRow, 0);
+
+            // Abre a TelaGerenciarParcelas com o ID do cliente
+            TelaGerenciaParcelas telaGerenciarParcelas = new TelaGerenciaParcelas(clienteId);
+            telaGerenciarParcelas.setVisible(true);
+            telaGerenciarParcelas.setLocationRelativeTo(this); // Centraliza a nova tela
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao abrir a tela de Gerenciar Parcelas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btPesquisaCliente1ActionPerformed
+
+    private void configurarTabela() {
+        tableTelaInicial.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Código", "Cliente", "Status"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+
+        tableTelaInicial.getColumnModel().getColumn(2).setCellRenderer(new StatusCellRenderer());
+    }
 
     /**
      * @param args the command line arguments
@@ -223,6 +345,7 @@ public class TelaHome extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGerenciarClientes;
     private javax.swing.JButton btPesquisaCliente;
+    private javax.swing.JButton btPesquisaCliente1;
     private javax.swing.JButton btStatusCliente;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

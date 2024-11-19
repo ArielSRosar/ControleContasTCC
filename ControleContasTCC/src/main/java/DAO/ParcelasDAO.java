@@ -63,29 +63,29 @@ public class ParcelasDAO {
         parcelas.setDataEmissao(rs.getDate("data_emissao").toLocalDate());
         return parcelas;
     }
-    
+
     public List<Parcelas> buscarParcelasPorClienteId(int idCliente) {
-    List<Parcelas> parcelasList = new ArrayList<>();
-    String sql = "SELECT * FROM parcelas WHERE id_cliente = ?";
+        List<Parcelas> parcelasList = new ArrayList<>();
+        String sql = "SELECT * FROM parcelas WHERE id_cliente = ?";
 
-    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-        stmt.setInt(1, idCliente);
-        ResultSet rs = stmt.executeQuery();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Parcelas parcela = new Parcelas();
-            parcela.setIdParcela(rs.getInt("id_parcela"));
-            parcela.setIdCliente(rs.getInt("id_cliente"));
-            parcela.setQuantidadeParcelas(rs.getInt("quantidade_parcelas"));
-            parcela.setValorTotal(rs.getDouble("valor_total"));
-            parcela.setDataEmissao(rs.getDate("data_emissao").toLocalDate());
-            parcelasList.add(parcela);
+            while (rs.next()) {
+                Parcelas parcela = new Parcelas();
+                parcela.setIdParcela(rs.getInt("id_parcela"));
+                parcela.setIdCliente(rs.getInt("id_cliente"));
+                parcela.setQuantidadeParcelas(rs.getInt("quantidade_parcelas"));
+                parcela.setValorTotal(rs.getDouble("valor_total"));
+                parcela.setDataEmissao(rs.getDate("data_emissao").toLocalDate());
+                parcelasList.add(parcela);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
 
-    return parcelasList;
-}
+        return parcelasList;
+    }
 
 }

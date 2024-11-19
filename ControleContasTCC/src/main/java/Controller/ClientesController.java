@@ -60,4 +60,15 @@ public class ClientesController {
     public List<Clientes> listarClientes() {
         return dao.getAllClients();
     }
+
+    public void atualizarCliente(int idCliente, String observacao, String status) throws Exception {
+        int idStatus = obterStatusId(status);
+        Clientes cliente = new Clientes();
+        cliente.setId(idCliente);
+        cliente.setObservacao(observacao);
+        cliente.setIdStatus(idStatus);
+
+        ClientesDAO dao = new ClientesDAO();
+        dao.updateCliente(cliente); // Chama o método no DAO
+    }
 }

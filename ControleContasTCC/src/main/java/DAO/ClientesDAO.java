@@ -28,7 +28,7 @@ public class ClientesDAO {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, clientes.getNome());
             stmt.setInt(2, clientes.getIdStatus());
-            System.out.println("RESULTADO DAO : " + clientes.getIdStatus() );
+            System.out.println("RESULTADO DAO : " + clientes.getIdStatus());
             stmt.setString(3, clientes.getCpf());
             stmt.setString(4, clientes.getObservacao());
             stmt.executeUpdate();
@@ -61,7 +61,7 @@ public class ClientesDAO {
 
     public List<Clientes> findByName(String name) {
         String sql = "SELECT * FROM clientes WHERE nome LIKE ?";
-        List<Clientes> listaClientes = new ArrayList<>();
+        List<Clientes> clientesList = new ArrayList<>();
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, "%" + name + "%");
             ResultSet rs = stmt.executeQuery();
@@ -73,33 +73,46 @@ public class ClientesDAO {
                 cliente.setCpf(rs.getString("cpf"));
                 cliente.setIdStatus(rs.getInt("id_status"));
                 cliente.setObservacao(rs.getString("observacoes"));
-                listaClientes.add(cliente);
+                clientesList.add(cliente);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return listaClientes;
+        return clientesList;
     }
 
-public List<Clientes> getAllClients() {
-    String sql = "SELECT * FROM clientes";
-    List<Clientes> clientesList = new ArrayList<>();
-    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-        ResultSet rs = stmt.executeQuery();
+    public List<Clientes> getAllClients() {
+        String sql = "SELECT * FROM clientes";
+        List<Clientes> clientesList = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Clientes cliente = new Clientes();
-            cliente.setId(rs.getInt("id_cliente"));
-            cliente.setNome(rs.getString("nome"));
-            cliente.setCpf(rs.getString("cpf"));
-            cliente.setIdStatus(rs.getInt("id_status"));
-            cliente.setObservacao(rs.getString("observacoes"));
-            clientesList.add(cliente);
+            while (rs.next()) {
+                Clientes cliente = new Clientes();
+                cliente.setId(rs.getInt("id_cliente"));
+                cliente.setNome(rs.getString("nome"));
+                cliente.setCpf(rs.getString("cpf"));
+                cliente.setIdStatus(rs.getInt("id_status"));
+                cliente.setObservacao(rs.getString("observacoes"));
+                clientesList.add(cliente);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return clientesList;
     }
-    return clientesList;
-}
+
+    public void updateCliente(Clientes cliente) throws Exception {
+        String sql = "UPDATE clientes SET observacoes = ?, id_status = ? WHERE id_cliente = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cliente.getObservacao());
+            stmt.setInt(2, cliente.getIdStatus());
+            stmt.setInt(3, cliente.getId());
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao atualizar cliente no banco de dados.");
+        }
+    }
 }
