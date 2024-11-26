@@ -21,7 +21,6 @@ Controller\ClientesController.class
 View\TelaHome$2.class
 DAO\ParcelasDAO.class
 Model\Parcelas.class
-View\TelaGerenciaParcelas$4.class
 View\TelaHome.class
 View\TelaGerenciaParcelas$1.class
 View\TelaGerenciarClientes.class

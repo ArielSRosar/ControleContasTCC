@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package View;
 
 import Controller.ClientesController;
@@ -9,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,9 +38,9 @@ public class TelaRelatorio extends JFrame {
         JPanel panelDatas = new JPanel(new FlowLayout());
         tfDataInicio = new JTextField(10);
         tfDataFim = new JTextField(10);
-        panelDatas.add(new JLabel("Data Início (YYYY-MM-DD): "));
+        panelDatas.add(new JLabel("Data Início (DD-MM-AA): "));
         panelDatas.add(tfDataInicio);
-        panelDatas.add(new JLabel("Data Fim (YYYY-MM-DD): "));
+        panelDatas.add(new JLabel("Data Fim (DD-MM-AA): "));
         panelDatas.add(tfDataFim);
 
         btGerarRelatorio = new JButton("Gerar Relatório");
@@ -54,8 +52,8 @@ public class TelaRelatorio extends JFrame {
 
     private void gerarRelatorio() {
         try {
-            String dataInicio = tfDataInicio.getText();
-            String dataFim = tfDataFim.getText();
+            String dataInicio = converterDataParaBanco(tfDataInicio.getText());
+            String dataFim = converterDataParaBanco(tfDataFim.getText());
 
             Map<String, Integer> relatorio = clientesController.gerarRelatorioPorStatus(dataInicio, dataFim);
 
@@ -82,6 +80,17 @@ public class TelaRelatorio extends JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao abrir o PDF: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+        }
+    }
+
+    private String converterDataParaBanco(String dataFormatoUsuario) {
+        try {
+            DateTimeFormatter formatoUsuario = DateTimeFormatter.ofPattern("dd/MM/yy");
+            DateTimeFormatter formatoBanco = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate data = LocalDate.parse(dataFormatoUsuario, formatoUsuario);
+            return data.format(formatoBanco);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Formato de data inválido. Use DD/MM/AA.");
         }
     }
 }

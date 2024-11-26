@@ -6,9 +6,7 @@ package View;
 
 import Controller.ClientesController;
 import Model.Clientes;
-import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
