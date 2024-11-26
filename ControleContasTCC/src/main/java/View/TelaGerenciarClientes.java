@@ -156,6 +156,7 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
      */
     private void salvarCliente() {
         try {
+            int id = Integer.parseInt(tfCodigoCliente.getText());
             String nome = tfNomeCliente.getText();
             String cpf = tfCPFCliente.getText();
             String status = cbStatusCliente.getSelectedItem().toString();
@@ -167,12 +168,13 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
             }
 
             Clientes cliente = new Clientes();
+            cliente.setId(id);
             cliente.setNome(nome);
             cliente.setCpf(cpf);
             cliente.setIdStatus(obterStatusId(status));
             cliente.setObservacao(observacao);
 
-            controller.salvarCliente(cliente.getNome(), cliente.getCpf(), status, cliente.getObservacao());
+            controller.salvarCliente(cliente.getId(), cliente.getNome(), cliente.getCpf(), status, cliente.getObservacao());
 
             JOptionPane.showMessageDialog(this, "Cliente salvo com sucesso!");
             limparCampos();

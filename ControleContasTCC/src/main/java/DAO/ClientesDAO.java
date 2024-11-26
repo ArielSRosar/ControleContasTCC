@@ -26,12 +26,13 @@ public class ClientesDAO {
     }
 
     public void save(Clientes clientes) {
-        String sql = "INSERT INTO clientes (nome, id_status, cpf, observacoes) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO clientes (id_cliente, nome, id_status, cpf, observacoes) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, clientes.getNome());
-            stmt.setInt(2, clientes.getIdStatus());
-            stmt.setString(3, clientes.getCpf());
-            stmt.setString(4, clientes.getObservacao());
+            stmt.setInt(1, clientes.getId());
+            stmt.setString(2, clientes.getNome());
+            stmt.setInt(3, clientes.getIdStatus());
+            stmt.setString(4, clientes.getCpf());
+            stmt.setString(5, clientes.getObservacao());
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

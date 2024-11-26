@@ -23,15 +23,20 @@ public class ClientesController {
     private final ClientesDAO dao;
 
     public ClientesController() {
-        dao = new ClientesDAO();
+        this.dao = new ClientesDAO();
     }
 
-    public void salvarCliente(String nome, String cpf, String status, String observacao) throws Exception {
+    public ClientesController(ClientesDAO dao) {
+        this.dao = dao;
+    }
+
+    public void salvarCliente(int idCliente, String nome, String cpf, String status, String observacao) throws Exception {
         if (nome.isEmpty() || cpf.isEmpty()) {
             throw new Exception("Preencha os campos obrigatórios!");
         }
         int idStatus = obterStatusId(status);
         Clientes cliente = new Clientes();
+        cliente.setId(idCliente);
         cliente.setNome(nome);
         cliente.setCpf(cpf);
         cliente.setIdStatus(idStatus);
@@ -73,7 +78,6 @@ public class ClientesController {
         cliente.setIdStatus(obterStatusId(novoStatus));
         cliente.setObservacao(observacao);
 
-        ClientesDAO dao = new ClientesDAO();
         dao.updateCliente(cliente);
 
     }

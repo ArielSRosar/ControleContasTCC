@@ -20,6 +20,10 @@ public class ParcelasController {
         this.parcelasDAO = new ParcelasDAO();
     }
 
+    public ParcelasController(ParcelasDAO parcelasDAO) {
+        this.parcelasDAO = parcelasDAO;
+    }
+
     public void salvarParcela(Parcelas parcela) {
         parcelasDAO.save(parcela);
     }
