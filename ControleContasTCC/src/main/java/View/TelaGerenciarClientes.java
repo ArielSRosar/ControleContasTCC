@@ -156,13 +156,11 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-
     private void salvarCliente() {
         try {
             String nome = tfNomeCliente.getText();
             String cpf = tfCPFCliente.getText();
             String status = cbStatusCliente.getSelectedItem().toString();
-            System.out.println("Status selecionado: " + status);
             String observacao = taObservacao.getText();
 
             if (nome.isEmpty() || cpf.isEmpty()) {
@@ -174,13 +172,15 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
             cliente.setNome(nome);
             cliente.setCpf(cpf);
             cliente.setIdStatus(obterStatusId(status));
-            System.out.println(obterStatusId(status));
             cliente.setObservacao(observacao);
 
             controller.salvarCliente(cliente.getNome(), cliente.getCpf(), status, cliente.getObservacao());
 
             JOptionPane.showMessageDialog(this, "Cliente salvo com sucesso!");
             limparCampos();
+            if (TelaHome.telaHomeInstance != null) {
+                TelaHome.telaHomeInstance.atualizarTabela();
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -209,7 +209,7 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
             case "Acordo":
                 return 3;
             default:
-                return -1; // Valor inválido, caso necessário tratar
+                return -1;
         }
     }
 

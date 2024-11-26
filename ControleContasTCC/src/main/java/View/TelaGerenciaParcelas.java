@@ -79,7 +79,6 @@ public class TelaGerenciaParcelas extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableParcelasAtivas = new javax.swing.JTable();
-        btSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
@@ -130,12 +129,10 @@ public class TelaGerenciaParcelas extends javax.swing.JFrame {
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Impede a edição das células
+                return false;
             }
         });
         jScrollPane1.setViewportView(tableParcelasAtivas);
-
-        btSair.setText("Sair");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,7 +170,6 @@ public class TelaGerenciaParcelas extends javax.swing.JFrame {
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btSair)
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -202,7 +198,6 @@ public class TelaGerenciaParcelas extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btSair)
                                 .addContainerGap())
         );
 
@@ -210,35 +205,7 @@ public class TelaGerenciaParcelas extends javax.swing.JFrame {
     }
 
     private void btPesquisaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisaClienteActionPerformed
-        try {
 
-            int idCliente = Integer.parseInt(tfIdCliente.getText());
-            Clientes clienteBuscado = clientesController.buscarClientePorId(idCliente);
-
-            if (clienteBuscado != null) {
-                System.out.println("Cliente encontrado: " + clienteBuscado.getNome());
-
-                List<Parcelas> parcelas = parcelasController.buscarParcelasPorClienteId(idCliente);
-
-                DefaultTableModel model = (DefaultTableModel) tableParcelasAtivas.getModel();
-                model.setRowCount(0);
-                for (Parcelas parcela : parcelas) {
-                    model.addRow(new Object[]{
-                        parcela.getValorTotal(),
-                        parcela.getQuantidadeParcelas(),
-                        parcela.getDataEmissao()
-                    });
-                }
-            } else {
-                System.out.println("Cliente não encontrado!");
-                JOptionPane.showMessageDialog(this, "Cliente não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "ID do cliente inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao buscar cliente ou parcelas!", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
     }//GEN-LAST:event_btPesquisaClienteActionPerformed
 
     private void btAddParcelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddParcelaActionPerformed
@@ -325,7 +292,6 @@ public class TelaGerenciaParcelas extends javax.swing.JFrame {
 
     private javax.swing.JButton btAddParcela;
     private javax.swing.JButton btPesquisaCliente;
-    private javax.swing.JButton btSair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

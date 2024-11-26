@@ -23,6 +23,7 @@ public class TelaHome extends javax.swing.JFrame {
     private final ClientesController controller;
 
     public TelaHome() {
+        telaHomeInstance = this;
         initComponents();
         controller = new ClientesController();
         carregarClientes();
@@ -46,7 +47,7 @@ public class TelaHome extends javax.swing.JFrame {
 
     private void abrirTelaGerenciarClientes() {
         TelaGerenciarClientes telaGerenciarClientes = new TelaGerenciarClientes();
-        telaGerenciarClientes.setVisible(true); // Abre a tela
+        telaGerenciarClientes.setVisible(true);
     }
 
     private void pesquisarCliente() {
@@ -103,6 +104,7 @@ public class TelaHome extends javax.swing.JFrame {
         btStatusCliente = new javax.swing.JButton();
         btPesquisaCliente = new javax.swing.JButton();
         btPesquisaCliente1 = new javax.swing.JButton();
+        btRelatorio = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -157,6 +159,13 @@ public class TelaHome extends javax.swing.JFrame {
             }
         });
 
+        btRelatorio.setText("Relatório");
+        btRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRelatorioActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
@@ -175,7 +184,8 @@ public class TelaHome extends javax.swing.JFrame {
                     .addComponent(btGerenciarClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btStatusCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btPesquisaCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btPesquisaCliente1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btPesquisaCliente1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btRelatorio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -193,6 +203,8 @@ public class TelaHome extends javax.swing.JFrame {
                         .addComponent(btStatusCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btPesquisaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE))
                 .addContainerGap())
@@ -209,16 +221,13 @@ public class TelaHome extends javax.swing.JFrame {
 
     private void btPesquisaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisaClienteActionPerformed
         try {
-            // Mostra uma caixa de diálogo para o usuário digitar o nome
+
             String nome = JOptionPane.showInputDialog(this, "Digite o nome do cliente:",
                     "Pesquisar Cliente", JOptionPane.QUESTION_MESSAGE);
 
-            // Verifica se o usuário não cancelou ou deixou vazio
             if (nome != null && !nome.trim().isEmpty()) {
-                // Chama o Controller para buscar os clientes pelo nome
                 List<Clientes> listaClientes = controller.pesquisarClientePorNome(nome);
 
-                // Verifica se encontrou algum cliente
                 if (listaClientes.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Nenhum cliente encontrado!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
                 } else {
@@ -279,18 +288,22 @@ public class TelaHome extends javax.swing.JFrame {
                 return;
             }
 
-            // Recupera o ID do cliente selecionado
             int clienteId = (int) tableTelaInicial.getValueAt(selectedRow, 0);
 
-            // Abre a TelaGerenciarParcelas com o ID do cliente
             TelaGerenciaParcelas telaGerenciarParcelas = new TelaGerenciaParcelas(clienteId);
             telaGerenciarParcelas.setVisible(true);
-            telaGerenciarParcelas.setLocationRelativeTo(this); // Centraliza a nova tela
+            telaGerenciarParcelas.setLocationRelativeTo(this);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao abrir a tela de Gerenciar Parcelas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }//GEN-LAST:event_btPesquisaCliente1ActionPerformed
+
+    private void btRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRelatorioActionPerformed
+        TelaRelatorio telaRelatorio = new TelaRelatorio();
+        telaRelatorio.setVisible(true);
+        telaRelatorio.setLocationRelativeTo(this);
+    }//GEN-LAST:event_btRelatorioActionPerformed
 
     private void configurarTabela() {
         tableTelaInicial.setModel(new DefaultTableModel(
@@ -304,6 +317,29 @@ public class TelaHome extends javax.swing.JFrame {
         });
 
         tableTelaInicial.getColumnModel().getColumn(2).setCellRenderer(new StatusCellRenderer());
+    }
+
+    public void atualizarTabela() {
+        try {
+            ClientesController clientesController = new ClientesController();
+            List<Clientes> clientesList = clientesController.listarClientes();
+
+            DefaultTableModel model = (DefaultTableModel) tableTelaInicial.getModel();
+            model.setRowCount(0);
+
+            for (Clientes cliente : clientesList) {
+                model.addRow(new Object[]{
+                    cliente.getId(),
+                    cliente.getNome(),
+                    cliente.getIdStatus() == 0 ? "Negativado"
+                    : cliente.getIdStatus() == 1 ? "CDL"
+                    : cliente.getIdStatus() == 2 ? "Pequenas Causas" : "Acordo"
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar tabela!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -341,11 +377,12 @@ public class TelaHome extends javax.swing.JFrame {
             }
         });
     }
-
+    public static TelaHome telaHomeInstance;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGerenciarClientes;
     private javax.swing.JButton btPesquisaCliente;
     private javax.swing.JButton btPesquisaCliente1;
+    private javax.swing.JButton btRelatorio;
     private javax.swing.JButton btStatusCliente;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

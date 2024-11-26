@@ -105,10 +105,14 @@ public class TelaObservacao extends JFrame {
             String novaObservacao = taObservacao.getText();
             String novoStatus = (String) cbStatus.getSelectedItem();
 
-            clientesController.atualizarCliente(idCliente, novaObservacao, novoStatus);
+            clientesController.atualizarCliente(idCliente, novoStatus, novaObservacao);
 
             JOptionPane.showMessageDialog(this, "Alterações salvas com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            dispose(); // Fecha a tela
+
+            if (TelaHome.telaHomeInstance != null) {
+                TelaHome.telaHomeInstance.atualizarTabela();
+            }
+            dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar alterações: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();

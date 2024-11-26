@@ -3,9 +3,11 @@ Model\Clientes.class
 View\TelaGerenciarClientes$2.class
 View\TelaHome$5.class
 View\TelaGerenciaParcelas$3.class
+View\TelaRelatorio.class
 View\TelaHome$1.class
 View\TelaGerenciaParcelas$2.class
 View\TelaGerenciaParcelas.class
+View\TelaHome$8.class
 View\TelaHome$3.class
 View\TelaHome$6.class
 View\TelaObservacao$1.class
