@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 public class TelaGerenciarClientes extends javax.swing.JFrame {
 
     private final ClientesController controller;
+    private boolean isEditing = false;
 
     /**
      * Creates new form TelaGerenciarClientes
@@ -149,6 +150,7 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
         cancelarOperacao();
+        dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
 
     /**
@@ -167,6 +169,25 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
                 return;
             }
 
+            if (!isEditing) {
+                Clientes clienteExistente = controller.buscarClientePorId(id);
+
+                if (clienteExistente != null) {
+                    int resposta = JOptionPane.showConfirmDialog(this,
+                            "O código já existe para o cliente: " + clienteExistente.getNome()
+                            + ". Deseja editar este cliente?",
+                            "Cliente Existente", JOptionPane.YES_NO_OPTION);
+
+                    if (resposta == JOptionPane.YES_OPTION) {
+                        carregarDadosCliente(clienteExistente);
+                        isEditing = true;
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+            }
+
             Clientes cliente = new Clientes();
             cliente.setId(id);
             cliente.setNome(nome);
@@ -174,9 +195,19 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
             cliente.setIdStatus(obterStatusId(status));
             cliente.setObservacao(observacao);
 
-            controller.salvarCliente(cliente.getId(), cliente.getNome(), cliente.getCpf(), status, cliente.getObservacao());
+            if (isEditing) {
+                controller.atualizarCliente(cliente);
+                JOptionPane.showMessageDialog(this, "Cliente atualizado com sucesso!");
+                if (TelaHome.telaHomeInstance != null) {
+                    TelaHome.telaHomeInstance.atualizarTabela();
+                }
 
-            JOptionPane.showMessageDialog(this, "Cliente salvo com sucesso!");
+                isEditing = false;
+            } else {
+                controller.salvarCliente(id, nome, cpf, status, observacao);
+                JOptionPane.showMessageDialog(this, "Cliente salvo com sucesso!");
+            }
+
             limparCampos();
             if (TelaHome.telaHomeInstance != null) {
                 TelaHome.telaHomeInstance.atualizarTabela();
@@ -185,6 +216,14 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void carregarDadosCliente(Clientes cliente) {
+        tfCodigoCliente.setText(String.valueOf(cliente.getId()));
+        tfNomeCliente.setText(cliente.getNome());
+        tfCPFCliente.setText(cliente.getCpf());
+        cbStatusCliente.setSelectedItem(obterNomeStatus(cliente.getIdStatus()));
+        taObservacao.setText(cliente.getObservacao());
     }
 
     private void limparCampos() {
@@ -210,6 +249,21 @@ public class TelaGerenciarClientes extends javax.swing.JFrame {
                 return 3;
             default:
                 return -1;
+        }
+    }
+
+    private String obterNomeStatus(int idStatus) {
+        switch (idStatus) {
+            case 0:
+                return "Negativado";
+            case 1:
+                return "CDL";
+            case 2:
+                return "Pequenas Causas";
+            case 3:
+                return "Acordo";
+            default:
+                return "Desconhecido";
         }
     }
 

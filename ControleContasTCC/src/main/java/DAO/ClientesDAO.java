@@ -106,11 +106,24 @@ public class ClientesDAO {
     }
 
     public void updateCliente(Clientes cliente) throws Exception {
-        String sql = "UPDATE clientes SET id_status = ?, observacoes = ? WHERE id_cliente = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, cliente.getIdStatus());
-            stmt.setString(2, cliente.getObservacao());
-            stmt.setInt(3, cliente.getId());
+        String sqlCompleto = "UPDATE clientes SET nome = ?, cpf = ?, id_status = ?, observacoes = ? WHERE id_cliente = ?";
+        String sqlStatus = "UPDATE clientes SET id_status = ?, observacoes = ? WHERE id_cliente = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(
+                cliente.getNome() != null ? sqlCompleto : sqlStatus)) {
+
+            if (cliente.getNome() != null) {
+                stmt.setString(1, cliente.getNome());
+                stmt.setString(2, cliente.getCpf());
+                stmt.setInt(3, cliente.getIdStatus());
+                stmt.setString(4, cliente.getObservacao());
+                stmt.setInt(5, cliente.getId());
+            } else {
+                stmt.setInt(1, cliente.getIdStatus());
+                stmt.setString(2, cliente.getObservacao());
+                stmt.setInt(3, cliente.getId());
+            }
+
             stmt.executeUpdate();
 
             salvarStatusHistorico(cliente.getId(), obterNomeStatus(cliente.getIdStatus()));

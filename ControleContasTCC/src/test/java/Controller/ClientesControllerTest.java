@@ -51,12 +51,14 @@ public class ClientesControllerTest {
         int id = 1;
         Clientes cliente = new Clientes("Ariel", id, 1, "111.111.111-11", "Teste");
 
-        when(mockClientesDAO.findById(id)).thenReturn(cliente);
+        when(mockClientesDAO.findById(id)).thenReturn(cliente); 
 
         Clientes resultado = clientesController.buscarClientePorId(id);
 
         assertNotNull(resultado);
         assertEquals("Ariel", resultado.getNome());
+        assertEquals(1, resultado.getId());
+        assertEquals("Teste", resultado.getObservacao());
         verify(mockClientesDAO, times(1)).findById(id);
     }
 
@@ -91,14 +93,14 @@ public class ClientesControllerTest {
     }
 
     @Test
-    public void testAtualizarCliente() throws Exception {
+    public void testAtualizarClienteObservacao() throws Exception {
         int id = 1;
         String novoStatus = "Acordo";
         String observacao = "Atualizado";
 
         doNothing().when(mockClientesDAO).updateCliente(any(Clientes.class));
 
-        clientesController.atualizarCliente(id, novoStatus, observacao);
+        clientesController.atualizarClienteObservacao(id, novoStatus, observacao);
 
         verify(mockClientesDAO, times(1)).updateCliente(any(Clientes.class));
     }

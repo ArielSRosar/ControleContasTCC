@@ -38,9 +38,9 @@ public class TelaRelatorio extends JFrame {
         JPanel panelDatas = new JPanel(new FlowLayout());
         tfDataInicio = new JTextField(10);
         tfDataFim = new JTextField(10);
-        panelDatas.add(new JLabel("Data Início (DD-MM-AA): "));
+        panelDatas.add(new JLabel("Data Início (DD/MM/AA): "));
         panelDatas.add(tfDataInicio);
-        panelDatas.add(new JLabel("Data Fim (DD-MM-AA): "));
+        panelDatas.add(new JLabel("Data Fim (DD/MM/AA): "));
         panelDatas.add(tfDataFim);
 
         btGerarRelatorio = new JButton("Gerar Relatório");

@@ -72,11 +72,17 @@ public class ClientesController {
         return dao.getAllClients();
     }
 
-    public void atualizarCliente(int idCliente, String novoStatus, String observacao) throws Exception {
+    public void atualizarClienteObservacao(int idCliente, String novoStatus, String observacao) throws Exception {
         Clientes cliente = new Clientes();
         cliente.setId(idCliente);
         cliente.setIdStatus(obterStatusId(novoStatus));
         cliente.setObservacao(observacao);
+
+        dao.updateCliente(cliente);
+
+    }
+
+    public void atualizarCliente(Clientes cliente) throws Exception {
 
         dao.updateCliente(cliente);
 

@@ -105,7 +105,7 @@ public class TelaObservacao extends JFrame {
             String novaObservacao = taObservacao.getText();
             String novoStatus = (String) cbStatus.getSelectedItem();
 
-            clientesController.atualizarCliente(idCliente, novoStatus, novaObservacao);
+            clientesController.atualizarClienteObservacao(idCliente, novoStatus, novaObservacao);
 
             JOptionPane.showMessageDialog(this, "Alterações salvas com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
